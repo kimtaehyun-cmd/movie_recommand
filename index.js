@@ -268,10 +268,6 @@ app.get('/item-based/:item', (req, res) => {
 
 app.post('/user-based', (req, res) => {
   const inputRatingDict = req.body;
-
-  // result.stdin.write(JSON.stringify(inputRatingDict));
-  // result.stdin.end(); // 더이상 ㅔ이터가 없으면 전달 끝
-
   runPythonScript('recommender.py', ['user-based'], res, inputRatingDict);
 });
 
