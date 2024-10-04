@@ -169,9 +169,18 @@ const spawn = require('child_process').spawn; // Python 스크립트를 실행�
 const PORT = 8080; // 서버가 실행될 포트 번호 설정
 
 const app = express(); // Express 애플리케이션을 초기화
+require('dotenv').config();
 
 app.use(cors()); // CORS를 활성화하여 외부 도메인의 요청을 허용
 app.use(express.json()); // JSON 형식의 데이터를 파싱할 수 있도록 설정
+
+const isDevelopment = () => {
+  return process.env.NODE_ENV === 'development';
+};
+
+const pythonExePath = isDevelopment()
+  ? path.join('C:', 'conda', 'envs', 'recom_env', 'python.exe')
+  : path.join('/home/ubuntu/miniconda', 'envs', 'myenv', 'bin', 'python3');
 
 // Python 스크립트를 실행하는 공통 함수
 const runPythonScript = (script, args, res) => {
@@ -184,15 +193,15 @@ const runPythonScript = (script, args, res) => {
   //   'python.exe' // Conda 가상 환경에 있는 Python 인터프리터 경로
   // );
   // const pythonPath = path.join(__dirname, 'venv', 'bin', 'python3');
-  const pythonPath = path.join(
-    '/home/ubuntu/miniconda',
-    'envs',
-    'myenv',
-    'bin',
-    'python3'
-  );
+  // const pythonPath = path.join(
+  //   '/home/ubuntu/miniconda',
+  //   'envs',
+  //   'myenv',
+  //   'bin',
+  //   'python3'
+  // );
 
-  const result = spawn(pythonPath, [scriptPath, ...args]);
+  const result = spawn(pythonExePath, [scriptPath, ...args]);
 
   let responseData = ''; // Python 스크립트의 출력을 저장할 변수
 
