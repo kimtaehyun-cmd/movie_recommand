@@ -178,6 +178,7 @@ const isDevelopment = () => {
   return process.env.NODE_ENV === 'development';
 };
 
+// 새로추가
 const pythonExePath = isDevelopment()
   ? path.join('C:', 'conda', 'envs', 'recom_env', 'python.exe')
   : path.join('/home/ubuntu/miniconda', 'envs', 'myenv', 'bin', 'python3');
