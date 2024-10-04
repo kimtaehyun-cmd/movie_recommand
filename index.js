@@ -183,7 +183,14 @@ const runPythonScript = (script, args, res) => {
   //   'recom_env',
   //   'python.exe' // Conda 가상 환경에 있는 Python 인터프리터 경로
   // );
-  const pythonPath = path.join(__dirname, 'venv', 'bin', 'python3');
+  // const pythonPath = path.join(__dirname, 'venv', 'bin', 'python3');
+  const pythonPath = path.join(
+    '/home/ubuntu/miniconda',
+    'envs',
+    'myenv',
+    'bin',
+    'python3'
+  );
 
   const result = spawn(pythonPath, [scriptPath, ...args]);
 
