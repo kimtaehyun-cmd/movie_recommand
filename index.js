@@ -184,7 +184,7 @@ const pythonExePath = isDevelopment()
   : path.join('/home/ubuntu/miniconda', 'envs', 'myenv', 'bin', 'python3');
 
 // Python 스크립트를 실행하는 공통 함수
-const runPythonScript = (script, args, res) => {
+const runPythonScript = (script, args, res, inputData = null) => {
   const scriptPath = path.join(__dirname, script); // 실행할 Python 스크립트 파일 경로
   // const pythonPath = path.join(
   //   'C:',
@@ -229,6 +229,11 @@ const runPythonScript = (script, args, res) => {
   result.stderr.on('data', (data) => {
     console.error(`stderr: ${data}`);
   });
+
+  if (inputData) {
+    result.stdin.write(JSON.stringify(inputData));
+    result.stdin.end(); //더 이상 데이터가 없으면 전달 끝
+  }
 };
 
 // 루트 경로로 GET 요청이 들어오면 'Hello from Node server!' 메시지를 응답으로 전송
@@ -259,6 +264,15 @@ app.get('/genres/:genre/:count', (req, res) => {
 app.get('/item-based/:item', (req, res) => {
   const item = req.params.item;
   runPythonScript('recommender.py', ['item-based', item], res);
+});
+
+app.post('/user-based', (req, res) => {
+  const inputRatingDict = req.body;
+
+  // result.stdin.write(JSON.stringify(inputRatingDict));
+  // result.stdin.end(); // 더이상 ㅔ이터가 없으면 전달 끝
+
+  runPythonScript('recommender.py', ['user-based'], res, inputRatingDict);
 });
 
 app.listen(PORT, () => {
